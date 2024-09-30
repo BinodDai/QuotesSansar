@@ -2,7 +2,6 @@ package com.binod.quotessansar.ui.screens.main
 
 import android.content.ClipboardManager
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.binod.quotessansar.data.local.ThemePreferences
+import com.binod.quotessansar.data.local.quotes.entity.Quote
 import com.binod.quotessansar.data.remote.models.QuotesDataItem
 import com.binod.quotessansar.ui.components.QuotesFullCardItem
 import com.binod.quotessansar.utils.Result
@@ -104,7 +102,13 @@ fun QuotesListScreen(quotes: List<QuotesDataItem?>) {
                 QuotesFullCardItem(
                     quotesDataItem = item,
                     onBookmarkClick = {
-
+                        viewModel.insertQuote(
+                            Quote(
+                                quoteId = item.id ?: 0,
+                                quotes = item.quote.toString(),
+                                author = item.author.toString()
+                            )
+                        )
                     },
                     onShareClick = {
                         viewModel.shareQuote(context = context, quote = item.quote.toString())

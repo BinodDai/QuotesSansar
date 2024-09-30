@@ -9,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.binod.quotessansar.base.BaseViewModel
+import com.binod.quotessansar.data.local.quotes.entity.Quote
+import com.binod.quotessansar.data.local.quotes.repo.QuoteRepository
 import com.binod.quotessansar.data.remote.models.CategoryDataItem
 import com.binod.quotessansar.data.remote.models.QuotesDataItem
 import com.binod.quotessansar.data.remote.repository.QuotesRepo
@@ -18,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val quotesRepo: QuotesRepo) : BaseViewModel() {
+class HomeViewModel @Inject constructor(private val quotesRepo: QuotesRepo,private val localQuotesRepo: QuoteRepository) : BaseViewModel() {
     private val _quotes = mutableStateOf<Result<List<QuotesDataItem?>>>(Result.Loading())
     val quotes: State<Result<List<QuotesDataItem?>>> = _quotes
 
@@ -32,6 +34,7 @@ class HomeViewModel @Inject constructor(private val quotesRepo: QuotesRepo) : Ba
 
 
     private var isDataFetched = false
+    val allQuotes = localQuotesRepo.getAllQuotes()
 
     fun fetchQuotes() {
         viewModelScope.launch {
@@ -90,6 +93,19 @@ class HomeViewModel @Inject constructor(private val quotesRepo: QuotesRepo) : Ba
             allCategories.filter {
                 it?.category?.lowercase()?.contains(searchQuery) ?: false
             }
+        }
+    }
+
+
+    fun insertQuote(quote: Quote) {
+        viewModelScope.launch {
+            localQuotesRepo.insertQuote(quote)
+        }
+    }
+
+    fun deleteQuoteById(quoteId: Int) {
+        viewModelScope.launch {
+            localQuotesRepo.deleteQuoteById(quoteId)
         }
     }
 

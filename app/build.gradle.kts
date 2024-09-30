@@ -75,9 +75,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-
-
-
     // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -99,7 +96,14 @@ dependencies {
     //Datastore
     implementation (libs.androidx.datastore.preferences)
 
+    //Image Capture
     implementation (libs.capturable)
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
 
 
 }
